@@ -17,8 +17,6 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class NotificationService extends FirebaseMessagingService {
 
-    String TAG = "Fixed Betting Tips";
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
@@ -27,11 +25,11 @@ public class NotificationService extends FirebaseMessagingService {
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(getClass().toString().toUpperCase(), "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            Log.d(getClass().toString().toUpperCase(), "Message data payload: " + remoteMessage.getData());
             sendNotification(remoteMessage.getNotification().getBody());
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
@@ -46,7 +44,7 @@ public class NotificationService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             sendNotification(remoteMessage.getNotification().getBody());
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            Log.d(getClass().toString().toUpperCase(), "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -61,7 +59,7 @@ public class NotificationService extends FirebaseMessagingService {
      */
     @Override
     public void onNewToken(String token) {
-        Log.d(TAG, "Refreshed token: " + token);
+        Log.d(getClass().toString().toUpperCase(), "Refreshed token: " + token);
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
