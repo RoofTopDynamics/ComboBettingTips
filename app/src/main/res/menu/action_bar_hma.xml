@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
+    <item
+        android:id="@+id/rate_usbtnHM"
+        android:icon="@drawable/icons8_facebook_like_48px"
+        android:title="Rate Us"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/sharebtnHM"
+        android:icon="@drawable/icons8_gps_signal_48px"
+        android:title="Share"
+        app:showAsAction="ifRoom" />
+</menu>

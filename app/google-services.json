@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "77439309047",
+    "project_id": "sure-combo-betting-tips",
+    "storage_bucket": "sure-combo-betting-tips.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77439309047:android:489bff53b5e488a1a0aff2",
+        "android_client_info": {
+          "package_name": "com.rtx.combobettingtips"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "77439309047-j83vcq755ls8ava29km2pjc6o14t4nil.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9tSfdidMtr-oo7ffS3HeZxlot22cRDgQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "77439309047-j83vcq755ls8ava29km2pjc6o14t4nil.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
