@@ -19,7 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.github.ybq.android.spinkit.style.FoldingCube;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.spin_kit);
-        Sprite doubleBounce = new DoubleBounce();
+        Sprite doubleBounce = new FoldingCube();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
         progressLayout = findViewById(R.id.progress_layout);
@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity {
             }
 
             public void onProgressChanged(android.webkit.WebView view, int progress) {
-                hideTop();
+                executePostScript();
                 if (progress < 100) {
                 } else { // Progress >= 100
                     progressLayout.setVisibility(View.GONE);
@@ -75,13 +75,12 @@ public class MainActivity extends BaseActivity {
             }
 
             public void onPageFinished(WebView view, String weburl) {
-                hideTop();
-                loadAds();
+                executePostScript();
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(android.webkit.WebView view, int progress) {
-                hideTop();
+                executePostScript();
                 if (progress < 100) {
                 } else { // Progress >= 100
                     progressLayout.setVisibility(View.GONE);
@@ -101,7 +100,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 refreshLayout.setRefreshing(true);
-                loadUrl();
+                loadRemoteConfig();
                 refreshLayout.setRefreshing(false);
             }
         });
@@ -109,50 +108,29 @@ public class MainActivity extends BaseActivity {
         noInternetLayout = findViewById(R.id.no_internet_layout);
         reloadBtn = noInternetLayout.findViewById(R.id.reload_btn);
         reloadBtn.setOnClickListener(view -> {
-            loadUrl();
+            loadRemoteConfig();
         });
 
-        loadUrl();
+        loadRemoteConfig();
     }
 
-    private void hideTop() {
-        webView.loadUrl("javascript:(function f() { " +
-                "var images = document.getElementsByTagName('p'); " +
-                "for(var i = 0; i < images.length; i++){" +
-                "images[i].style.display = 'none';" +
-                "}" +
-                "} )()");
-        webView.loadUrl("javascript:(function f() { " +
-                "var alerts = document.getElementsByClassName('alert'); " +
-                "for(var i = 0; i < alerts.length; i++){" +
-                "alerts[i].style.display = 'none';" +
-                "}" +
-                "} )()");
-        webView.loadUrl("javascript:(function f() { " +
-                "var buttons = document.getElementsByTagName('button'); " +
-                "for(var i = 0; i < buttons.length; i++){" +
-                "buttons[i].style.display = 'none';" +
-                "}" +
-                "} )()");
-        //       webView.loadUrl("javascript:(function f() { document.getElementsByTagName('img')[0].style.display = 'none'; } )()");
-        //       webView.loadUrl("javascript:(function f() { document.getElementsByClassName('alert')[1].style.display = 'none'; } )()");
-        //       webView.loadUrl("javascript:(function f() { document.getElementsByClassName('alert')[2].style.display = 'none'; } )()");
-        //       webView.loadUrl("javascript:(function f() { document.getElementsByClassName('alert')[3].style.display = 'none'; } )()");
+    private void executePostScript() {
+        webView.loadUrl(postScript);
     }
 
-    private void loadUrl() {
+    private void loadUrl(String url) {
         if (isInternetConnected(getApplicationContext())) {
             refreshLayout.setVisibility(View.GONE);
             noInternetLayout.setVisibility(View.GONE);
             progressLayout.setVisibility(View.VISIBLE);
-            webView.loadUrl(AppConstants.URL);
+            webView.loadUrl(url);
         } else {
             progressLayout.setVisibility(View.GONE);
             refreshLayout.setVisibility(View.GONE);
             noInternetLayout.setVisibility(View.VISIBLE);
             logMessage("Turn on Wifi or Mobile Data");
         }
-        hideTop();
+        executePostScript();
     }
 
     // Check Connection
@@ -165,7 +143,7 @@ public class MainActivity extends BaseActivity {
                 && con_manager.getActiveNetworkInfo().isConnected());
     }
 
-    private void loadAds() {
+    private void loadRemoteConfig() {
 
         FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
@@ -180,51 +158,68 @@ public class MainActivity extends BaseActivity {
                             boolean updated = task.getResult();
 
                             String adType = mFirebaseRemoteConfig.getString("ad_type");
+                            String url = mFirebaseRemoteConfig.getString("url");
+                            postScript = mFirebaseRemoteConfig.getString("post_script");
 
-                            switch (adType) {
-                                case "admob":
-                                    testAdmob();
-                                    break;
-                                case "facebook":
-                                    testFacebook();
-                                    break;
-                                case "adcolony":
-                                    testAdColony();
-                                    break;
-                                case "unity":
-                                    testUnity();
-                                    break;
-                                default:
-                                    //DO NOTHING
-                                    break;
-                            }
+                            loadUrl(url);
+                            loadAd(adType);
+
                         } else {
                             Toast.makeText(MainActivity.this, "Fetch failed",
                                     Toast.LENGTH_SHORT).show();
+                            progressLayout.setVisibility(View.GONE);
+                            refreshLayout.setVisibility(View.GONE);
+                            noInternetLayout.setVisibility(View.VISIBLE);
+                            logMessage("Turn on Wifi or Mobile Data");
                         }
                     }
                 });
     }
 
-    private void testAdColony() {
+    private boolean adsLoaded = false;
+    private String postScript = "";
+
+    private void loadAd(String adType) {
+        if (adsLoaded) return;
+        switch (adType.toLowerCase()) {
+            case "admob":
+                loadAdmob();
+                break;
+            case "facebook":
+                loadFacebook();
+                break;
+            case "adcolony":
+                loadAdColony();
+                break;
+            case "unity":
+                loadUnity();
+                break;
+            default:
+                //DO NOTHING
+                break;
+        }
+        adsLoaded = true;
+    }
+
+    private void loadAdColony() {
         adController.setAdConfig(AppConstants.ADCOLONY());
         adController.loadBannerAd((ViewGroup) findViewById(R.id.ad_view));
         adController.loadInterstitialAd(true);
     }
 
-    private void testFacebook() {
+    private void loadFacebook() {
         adController.setAdConfig(AppConstants.FACEBOOK());
         adController.loadBannerAd((ViewGroup) findViewById(R.id.ad_view));
         adController.loadInterstitialAd(true);
     }
 
-    private void testAdmob() {
+    private void loadAdmob() {
         adController.setAdConfig(AppConstants.ADMOB());
         adController.loadBannerAd((ViewGroup) findViewById(R.id.ad_view));
         adController.loadInterstitialAd(true);
     }
 
-    private void testUnity() {
+    private void loadUnity() {
         adController.setAdConfig(AppConstants.UNITY());
         adController.loadBannerAd((ViewGroup) findViewById(R.id.ad_view));
         adController.loadInterstitialAd(true);

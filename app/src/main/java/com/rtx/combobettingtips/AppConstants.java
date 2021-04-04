@@ -5,8 +5,6 @@ import com.rtdx.ads.configs.AdType;
 
 public final class AppConstants {
 
-    public static final String URL = "https://goldtiickets.blogspot.com/?m=0";
-
     public static AdConfig ADCOLONY() {
         AdConfig adColonyConfig = new AdConfig(AdType.ADCOLONY);
         adColonyConfig.APP_ID = "app7157710837c94a20b3";
