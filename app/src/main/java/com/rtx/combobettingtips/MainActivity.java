@@ -28,14 +28,10 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 public class MainActivity extends BaseActivity {
 
     private WebView webView;
-    private static String url;
-    boolean pageLoaded = false;
     SwipeRefreshLayout refreshLayout;
     ViewGroup progressLayout;
     View noInternetLayout;
     Button reloadBtn;
-
-    public float visibleHeight;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -79,15 +75,8 @@ public class MainActivity extends BaseActivity {
             }
 
             public void onPageFinished(WebView view, String weburl) {
-                if (!pageLoaded) {
-                    // reload the page again
-                    hideTop();
-                    loadUrl();
-                    pageLoaded = true;
-                } else {
-                    hideTop();
-                    loadAds();
-                }
+                hideTop();
+                loadAds();
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
@@ -128,11 +117,9 @@ public class MainActivity extends BaseActivity {
 
     private void hideTop() {
         webView.loadUrl("javascript:(function f() { " +
-                "var images = document.getElementsByTagName('img'); " +
+                "var images = document.getElementsByTagName('p'); " +
                 "for(var i = 0; i < images.length; i++){" +
-                "if(images[i].src == 'http://www.antalyafirmalari.com/tip/flags/wengervipkandirmaca.jpg'){" +
                 "images[i].style.display = 'none';" +
-                "}" +
                 "}" +
                 "} )()");
         webView.loadUrl("javascript:(function f() { " +

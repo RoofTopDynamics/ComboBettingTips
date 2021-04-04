@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.rtdx.ads.BuildConfig;
 import com.rtdx.ads.controllers.UnifiedAdController;
 
 public class BaseActivity extends AppCompatActivity {
