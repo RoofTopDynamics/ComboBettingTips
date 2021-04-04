@@ -79,9 +79,9 @@ public class BaseActivity extends AppCompatActivity {
         }
         // this is the sharing part
         a.setType("text/link");
-        String shareBody = "Hey! GET FREE 🔥 HOT 🔥 Betting Tips Daily." +
+        String shareBody = "Hey! GET FREE 🔥 COMBO 🔥 Betting Tips Daily." +
                 "\n" + "" + strAppLink;
-        String shareSub = "Fixed Betting Tips";
+        String shareSub = "Combo Betting Tips";
         a.putExtra(Intent.EXTRA_SUBJECT, shareSub);
         a.putExtra(Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(a, "Share Using"));
