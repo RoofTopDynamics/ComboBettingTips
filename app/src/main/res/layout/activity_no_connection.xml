@@ -2,10 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/no_internet_layout"
+    android:id="@+id/no_connection_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@color/colorPrimary"
     android:padding="5dp"
     tools:ignore="HardcodedText">
 
@@ -15,21 +16,20 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_gravity="center"
-            android:layout_marginTop="102dp"
-            android:contentDescription="No Internet"
+            android:layout_marginTop="72dp"
             android:elevation="20dp"
             android:src="@drawable/no_internet"
+            app:layout_constraintBottom_toTopOf="@id/no_connection"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/no_connection"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
@@ -37,20 +37,21 @@
             android:paddingHorizontal="8sp"
             android:text="PLEASE TURN ON INTERNET THEN RELOAD"
             android:textAlignment="center"
-            android:textSize="16sp"
+            android:textColor="#fff"
+            android:textSize="17sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/reloadbtn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <Button
-            android:id="@+id/reload_btn"
+            android:id="@+id/reloadbtn"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="100dp"
-            android:background="@color/teal_200"
+            android:layout_marginBottom="35dp"
+            android:background="@color/colorAccent"
             android:elevation="40dp"
             android:padding="3dp"
             android:text="RELOAD"
@@ -60,11 +61,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/no_connection" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </RelativeLayout>
