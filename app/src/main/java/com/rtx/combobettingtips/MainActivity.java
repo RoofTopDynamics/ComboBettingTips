@@ -24,8 +24,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-import com.rtdx.ads.BaseActivity;
-import com.rtdx.ads.configs.AdConfig;
+import com.rtdx.ads.base.BaseActivity;
+import com.rtdx.ads.utils.AdConfig;
 
 public class MainActivity extends BaseActivity {
 
